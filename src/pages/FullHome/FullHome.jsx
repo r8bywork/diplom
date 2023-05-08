@@ -1,6 +1,6 @@
 import { Menu } from "antd";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddFeedPage } from "../AddFeedPage/AddFeedPage";
 import { SettingsPage } from "../SettingsPage/SettingsPage";
@@ -22,22 +22,60 @@ const FullHome = () => {
 		setCurrentMenu(key);
 	};
 
-	const checkAuthorization = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			await axios.get("http://localhost:3001/auth/findUser", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-		} catch (error) {
-			console.log(error);
-			navigate("/login");
-		}
-	};
+	useEffect(() => {
+		const checkAuthorization = async () => {
+			try {
+				const token = localStorage.getItem("token");
+				await axios.get("http://localhost:3001/auth/findUser", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+			} catch (error) {
+				console.log(error);
+				navigate("/login");
+			}
+		};
 
-	// Вызываем функцию для проверки авторизации при загрузке главной страницы
-	checkAuthorization();
+		const fetchData = async () => {
+			// const date = new Date().toISOString();
+			const date = new Date();
+			date.setHours(date.getHours() + 3);
+			const dateWithAddedHours = date.toISOString();
+			console.log(dateWithAddedHours);
+			const response = await axios.get("http://localhost:3001/row/getToday", {
+				// params: { date: `${dateWithAddedHours}` },
+			});
+			console.log(response);
+			if (response.data == null) {
+				axios
+					.post("http://localhost:3001/row/create", {
+						milk_production: 0,
+						milk_truck_order: 0,
+						gross_yield: 0,
+						milk_consumption: 0,
+						heifers: 0,
+						cows: 0,
+						hutch_number: 0,
+						calves_per_hutch: 0,
+						abortions: 0,
+						young_animal_losses: 0,
+						stillbirths: 0,
+						losses_during_fattening_of_cows: 0,
+						losses_of_main_herd_cows: 0,
+					})
+					.then((response) => {
+						console.log(response.data);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			}
+		};
+
+		checkAuthorization();
+		fetchData();
+	}, []);
 
 	return (
 		<div>
