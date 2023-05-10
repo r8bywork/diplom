@@ -71,11 +71,10 @@ const LoginPage = () => {
 					<Button type="primary" htmlType="submit">
 						Войти
 					</Button>
-				</Form.Item>
-
-				<Form.Item>
-					<Button type="link">Зарегистрироваться</Button>
-					<Button type="link">Забыли пароль?</Button>
+					<Button type="link" onClick={() => navigate("/registration")}>
+						Зарегистрироваться
+					</Button>
+					{/* <Button type="link">Забыли пароль?</Button> */}
 				</Form.Item>
 			</Form>
 		</div>

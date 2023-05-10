@@ -16,7 +16,7 @@ const menuItems = [
 
 const FullHome = () => {
 	const navigate = useNavigate();
-	const [currentMenu, setCurrentMenu] = useState(menuItems[2].key);
+	const [currentMenu, setCurrentMenu] = useState(menuItems[0].key);
 
 	const handleMenuClick = ({ key }) => {
 		setCurrentMenu(key);

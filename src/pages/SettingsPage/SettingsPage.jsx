@@ -25,8 +25,17 @@ const SettingsPage = () => {
 		return null; // или что-то другое, что покажет пользователю, что данные еще загружаются
 	}
 	const onFinish = async (values) => {
-		console.log(values);
-		// updateUserData(values);
+		try {
+			console.log(userData.user._id);
+			const response = await axios.put(
+				`http://localhost:3001/user/${userData.user._id}`,
+				values
+			);
+			const updatedUser = response.data;
+			console.log(updatedUser);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const handleLogout = () => {

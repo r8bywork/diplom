@@ -1,8 +1,16 @@
+import hutch_number from "../../../assets/hutch_number.jpeg";
+import meet from "../../../assets/meet.webp";
+import milk_consumption from "../../../assets/milk_consumption.jpeg";
+import milk_production from "../../../assets/milk_production.jpeg";
+import milk_truck_order from "../../../assets/milk_truck_order.jpeg";
+import gross_yield from "../../../assets/releaseMilk.jpg";
+import rojd from "../../../assets/rojd.jpeg";
 export const cards = [
 	{
 		id: 1,
 		title: "Реализация молока",
 		// image: "https://picsum.photos/id/1/300/200",
+		image: gross_yield,
 		fields: [
 			{
 				label: "Количество молока",
@@ -15,6 +23,7 @@ export const cards = [
 		id: 2,
 		title: "Заявка на молоковоз",
 		// image: "https://picsum.photos/id/2/300/200",
+		image: milk_truck_order,
 		fields: [
 			{
 				label: "Количество машин",
@@ -27,6 +36,7 @@ export const cards = [
 		id: 3,
 		title: "Валовый надой",
 		// image: "https://picsum.photos/id/1/300/200",
+		image: milk_production,
 		fields: [
 			{
 				label: "Количество надоя за день",
@@ -39,6 +49,7 @@ export const cards = [
 		id: 4,
 		title: "Отелы голов",
 		// image: "https://picsum.photos/id/1/300/200",
+		image: rojd,
 		fields: [
 			{
 				label: "Нетеля",
@@ -56,6 +67,7 @@ export const cards = [
 		id: 5,
 		title: "Кол-во телят на выпойке",
 		// image: "https://picsum.photos/id/1/300/200",
+		image: milk_consumption,
 		fields: [
 			{
 				label: "Сколько голов",
@@ -68,6 +80,7 @@ export const cards = [
 		id: 6,
 		title: "Непроизводственное выбытие",
 		// image: "https://picsum.photos/id/1/300/200",
+		image: meet,
 		fields: [
 			{
 				label: "Аборты",
@@ -100,6 +113,7 @@ export const cards = [
 		id: 7,
 		title: "Кол-во телят в домике",
 		// image: "https://picsum.photos/id/1/300/200",
+		image: hutch_number,
 		fields: [
 			{
 				label: "Выберите домик",
