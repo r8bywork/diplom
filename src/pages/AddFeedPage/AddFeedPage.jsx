@@ -1,10 +1,11 @@
 import { Button, Input } from "antd";
+import axios from "axios";
 import React, { useState } from "react";
 
 const AddFeedPage = () => {
-	const [feedType, setFeedType] = useState("");
-	const [remainingAmount, setRemainingAmount] = useState("");
-	const [dailyRequirement, setDailyRequirement] = useState("");
+	const [name, setFeedType] = useState("");
+	const [balance, setRemainingAmount] = useState("");
+	const [daily_requirement, setDailyRequirement] = useState("");
 
 	const handleFeedTypeChange = (event) => {
 		setFeedType(event.target.value);
@@ -18,14 +19,22 @@ const AddFeedPage = () => {
 		setDailyRequirement(event.target.value);
 	};
 
-	const handleAddFeed = () => {
-		// Add feed to database or perform other actions here
-		console.log("Feed added:", { feedType, remainingAmount, dailyRequirement });
-
-		// Clear input fields after adding feed
-		setFeedType("");
-		setRemainingAmount("");
-		setDailyRequirement("");
+	const handleAddFeed = async () => {
+		const feedAndAddivitives = {
+			name,
+			balance,
+			daily_requirement,
+		};
+		// console.log("Feed added:", { name, balance, daily_requirement });
+		try {
+			const response = await axios.post(
+				"http://localhost:3001/feedAndAddivitives/update",
+				feedAndAddivitives
+			);
+			return response.data;
+		} catch (error) {
+			throw new Error(error.response.data);
+		}
 	};
 
 	return (
@@ -45,7 +54,7 @@ const AddFeedPage = () => {
 				<label style={{ marginRight: "16px" }}>Наимнование:</label>
 				<Input
 					style={{ flex: "1" }}
-					value={feedType}
+					value={name}
 					onChange={handleFeedTypeChange}
 				/>
 			</div>
@@ -53,7 +62,7 @@ const AddFeedPage = () => {
 				<label style={{ marginRight: "16px" }}>Количество:</label>
 				<Input
 					style={{ flex: "1" }}
-					value={remainingAmount}
+					value={balance}
 					onChange={handleRemainingAmountChange}
 				/>
 			</div>
@@ -61,7 +70,7 @@ const AddFeedPage = () => {
 				<label style={{ marginRight: "16px" }}>Дневная потребность:</label>
 				<Input
 					style={{ flex: "1" }}
-					value={dailyRequirement}
+					value={daily_requirement}
 					onChange={handleDailyRequirementChange}
 				/>
 			</div>

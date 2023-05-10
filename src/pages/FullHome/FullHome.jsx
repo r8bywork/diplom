@@ -32,21 +32,15 @@ const FullHome = () => {
 					},
 				});
 			} catch (error) {
-				console.log(error);
 				navigate("/login");
+				console.log(error);
 			}
 		};
 
 		const fetchData = async () => {
-			// const date = new Date().toISOString();
 			const date = new Date();
 			date.setHours(date.getHours() + 3);
-			const dateWithAddedHours = date.toISOString();
-			console.log(dateWithAddedHours);
-			const response = await axios.get("http://localhost:3001/row/getToday", {
-				// params: { date: `${dateWithAddedHours}` },
-			});
-			console.log(response);
+			const response = await axios.get("http://localhost:3001/row/getToday");
 			if (response.data == null) {
 				axios
 					.post("http://localhost:3001/row/create", {
@@ -65,7 +59,7 @@ const FullHome = () => {
 						losses_of_main_herd_cows: 0,
 					})
 					.then((response) => {
-						console.log(response.data);
+						// console.log(response.data);
 					})
 					.catch((error) => {
 						console.error(error);
@@ -75,7 +69,7 @@ const FullHome = () => {
 
 		checkAuthorization();
 		fetchData();
-	}, []);
+	}, [navigate]);
 
 	return (
 		<div>

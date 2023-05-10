@@ -8,7 +8,6 @@ const LoginPage = () => {
 		const { username, password } = values;
 		console.clear();
 		try {
-			console.log("Success:", values);
 			const response = await axios.post("http://localhost:3001/auth/login", {
 				username,
 				password,
