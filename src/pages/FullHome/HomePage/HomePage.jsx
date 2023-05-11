@@ -26,7 +26,6 @@ const HomePage = () => {
 				inputValues
 			);
 			setInputValues({});
-			console.log(response);
 			return response.data;
 		} catch (error) {
 			console.error(error);
@@ -68,13 +67,12 @@ const HomePage = () => {
 					losses_of_main_herd_cows: 0,
 				})
 				.then((response) => {
-					console.log(response.data);
+					// console.log(response.data);
 				})
 				.catch((error) => {
 					console.error(error);
 				});
 		} else {
-			console.log(response.data._id);
 			setDocumentId(response.data._id);
 		}
 	};
