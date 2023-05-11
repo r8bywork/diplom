@@ -1,5 +1,6 @@
 import { Card, Input, Modal, Select } from "antd";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 import { cards } from "./mock";
 const { Meta } = Card;
@@ -8,6 +9,7 @@ const HomePage = () => {
 	const [visible, setVisible] = useState(false);
 	const [card, setCard] = useState({});
 	const [inputValues, setInputValues] = useState({});
+	const [documentId, setDocumentId] = useState("");
 
 	const showModal = (card) => {
 		setVisible(true);
@@ -15,10 +17,21 @@ const HomePage = () => {
 		setInputValues({});
 	};
 
-	const handleOk = () => {
+	const handleOk = async () => {
 		setVisible(false);
 		console.log("Form data:", inputValues);
-		setInputValues({});
+		try {
+			const response = await axios.put(
+				`http://localhost:3001/row/update/${documentId}`,
+				inputValues
+			);
+			setInputValues({});
+			console.log(response);
+			return response.data;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	};
 
 	const handleCancel = () => {
@@ -32,6 +45,43 @@ const HomePage = () => {
 			[key]: e.target.value,
 		});
 	};
+
+	const fetchData = async () => {
+		const date = new Date();
+		date.setHours(date.getHours() + 3);
+		const response = await axios.get("http://localhost:3001/row/getToday");
+		if (response.data == null) {
+			axios
+				.post("http://localhost:3001/row/create", {
+					milk_production: 0,
+					milk_truck_order: 0,
+					gross_yield: 0,
+					milk_consumption: 0,
+					heifers: 0,
+					cows: 0,
+					hutch_number: 0,
+					calves_per_hutch: 0,
+					abortions: 0,
+					young_animal_losses: 0,
+					stillbirths: 0,
+					losses_during_fattening_of_cows: 0,
+					losses_of_main_herd_cows: 0,
+				})
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		} else {
+			console.log(response.data._id);
+			setDocumentId(response.data._id);
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 	return (
 		<div className="App">
@@ -47,7 +97,7 @@ const HomePage = () => {
 						<img
 							alt="card-img"
 							src={card.image}
-							style={{ marginTop: 16, height: 170 }}
+							style={{ marginTop: 16, height: 170, width: 250 }}
 						/>
 					</Card>
 				))}

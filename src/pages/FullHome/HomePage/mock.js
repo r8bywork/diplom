@@ -9,7 +9,6 @@ export const cards = [
 	{
 		id: 1,
 		title: "Реализация молока",
-		// image: "https://picsum.photos/id/1/300/200",
 		image: gross_yield,
 		fields: [
 			{
@@ -22,7 +21,6 @@ export const cards = [
 	{
 		id: 2,
 		title: "Заявка на молоковоз",
-		// image: "https://picsum.photos/id/2/300/200",
 		image: milk_truck_order,
 		fields: [
 			{
@@ -35,7 +33,6 @@ export const cards = [
 	{
 		id: 3,
 		title: "Валовый надой",
-		// image: "https://picsum.photos/id/1/300/200",
 		image: milk_production,
 		fields: [
 			{
@@ -48,7 +45,6 @@ export const cards = [
 	{
 		id: 4,
 		title: "Отелы голов",
-		// image: "https://picsum.photos/id/1/300/200",
 		image: rojd,
 		fields: [
 			{
@@ -66,7 +62,6 @@ export const cards = [
 	{
 		id: 5,
 		title: "Кол-во телят на выпойке",
-		// image: "https://picsum.photos/id/1/300/200",
 		image: milk_consumption,
 		fields: [
 			{
@@ -79,7 +74,6 @@ export const cards = [
 	{
 		id: 6,
 		title: "Непроизводственное выбытие",
-		// image: "https://picsum.photos/id/1/300/200",
 		image: meet,
 		fields: [
 			{
@@ -112,7 +106,6 @@ export const cards = [
 	{
 		id: 7,
 		title: "Кол-во телят в домике",
-		// image: "https://picsum.photos/id/1/300/200",
 		image: hutch_number,
 		fields: [
 			{
