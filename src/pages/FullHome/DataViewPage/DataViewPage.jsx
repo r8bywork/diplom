@@ -1,102 +1,14 @@
-import { Button, DatePicker, Radio, Table } from "antd";
+import { DatePicker, Input, Modal, Radio, Table, message } from "antd";
 import axios from "axios";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
+import { columns, columnsFeed, columnsHouse } from "./mock";
 const { RangePicker } = DatePicker;
-
-const columns = [
-	{
-		width: "auto",
-		title: "Кол-во молока",
-		dataIndex: "milk_production",
-		key: "milk_production",
-	},
-	{
-		width: "auto",
-		title: "Молоковоз",
-		dataIndex: "milk_truck_order",
-		key: "milk_truck_order",
-	},
-	{
-		width: "auto",
-		title: "Валовый надой",
-		dataIndex: "gross_yield",
-		key: "gross_yield",
-	},
-	{
-		width: "auto",
-		title: "Выпойка молока",
-		dataIndex: "milk_consumption",
-		key: "milk_consumption",
-	},
-	{
-		width: "auto",
-		title: "Нетеля",
-		dataIndex: "heifers",
-		key: "heifers",
-	},
-	{
-		width: "auto",
-		title: "Коровы",
-		dataIndex: "cows",
-		key: "cows",
-	},
-	{
-		width: "auto",
-		title: "Номер домика",
-		dataIndex: "hutch_number",
-		key: "hutch_number",
-	},
-	// {
-	// 	title: "Кол-во в домике",
-	// 	dataIndex: "calves_per_hutch",
-	// 	key: "calves_per_hutch",
-	// },
-	// {
-	// 	title: "Аборты",
-	// 	dataIndex: "abortions",
-	// 	key: "abortions",
-	// },
-	{
-		width: "auto",
-		title: "Падеж молодняка",
-		dataIndex: "young_animal_losses",
-		key: "young_animal_losses",
-	},
-	{
-		width: "auto",
-		title: "Мертворожденные",
-		dataIndex: "stillbirths",
-		key: "stillbirths",
-	},
-	{
-		width: "auto",
-		title: "Падеж коров на откормке",
-		dataIndex: "losses_during_fattening_of_cows",
-		key: "losses_during_fattening_of_cows",
-	},
-	{
-		width: "auto",
-		title: "Падеж коров основного стада",
-		dataIndex: "losses_of_main_herd_cows",
-		key: "losses_of_main_herd_cows",
-	},
-	{
-		width: "auto",
-		title: "Дата создания",
-		dataIndex: "createdAt",
-		key: "createdAt",
-	},
-	// {
-	// 	title: "Updated At",
-	// 	dataIndex: "updatedAt",
-	// 	key: "updatedAt",
-	// },
-];
 
 const DataViewPage = () => {
 	const [rowData, setRowData] = useState([]);
 	const [rowData2, setRowData2] = useState([]);
+	const [houseData, setHouseData] = useState([]);
 	const [selectedDataSource, setSelectedDataSource] = useState("all");
 	const [startDate, setStartDate] = useState(
 		dayjs().startOf("day").format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z"
@@ -105,37 +17,40 @@ const DataViewPage = () => {
 		dayjs().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z"
 	);
 
-	const columnsFeed = [
-		{
-			title: "Наименование",
-			dataIndex: "name",
-			key: "name",
-		},
-		{
-			title: "Остаток",
-			dataIndex: "balance",
-			key: "balance",
-		},
-		{
-			title: "Дневная потребность",
-			dataIndex: "daily_requirement",
-			key: "daily_requirement",
-		},
-		{
-			title: "Действия",
-			key: "actions",
-			render: (_, record) => (
-				<Button onClick={() => handleDelete(record._id)}>Удалить</Button>
-			),
-		},
-	];
+	const [visible, setVisible] = useState(false);
+	const [selectedHouse, setSelectedHouse] = useState(null);
+	const [formValues, setFormValues] = useState({});
 
-	const handleDelete = async (id) => {
+	const showModal = (record) => {
+		setSelectedHouse(record);
+		setFormValues({
+			name: record.name,
+			cowsCount: record.cowsCount,
+		});
+		console.log(formValues);
+		setVisible(true);
+	};
+
+	const handleCancel = () => {
+		setVisible(false);
+		setFormValues({});
+	};
+
+	const handleOk = async () => {
 		try {
-			console.log(id);
-			// await axios.delete(`http://localhost:3001/feedAndAddivitives/${id}`);
-		} catch (err) {
-			console.log(err);
+			console.log(formValues);
+			console.log(selectedHouse);
+			const response = await axios.put(`http://localhost:3001/houses/update`, {
+				houseId: selectedHouse._id,
+				...formValues,
+			});
+			response.status === 200
+				? message.success("Вы успешно обновили данные!")
+				: message.error("Ошибка!");
+			setVisible(false);
+			setFormValues({});
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -157,13 +72,26 @@ const DataViewPage = () => {
 				"http://localhost:3001/feedAndAddivitives/find",
 				{}
 			);
+
 			setRowData2(response.data[0].feed_and_additives);
 		};
-		selectedDataSource === "all" ? fetchData() : fetchDataFeed();
-	}, [selectedDataSource, startDate, endDate]);
+
+		const fetchHouseData = async () => {
+			const response = await axios.get("http://localhost:3001/houses", {});
+			setHouseData(response.data[0].houses);
+		};
+
+		selectedDataSource === "all"
+			? fetchData()
+			: selectedDataSource === "feed"
+			? fetchDataFeed()
+			: fetchHouseData();
+	}, [selectedDataSource, startDate, endDate, houseData]);
 
 	const handleDataSourceChange = (e) => {
 		setSelectedDataSource(e.target.value);
+		setVisible(false);
+		setFormValues({});
 	};
 
 	const transformData = (data) => {
@@ -184,6 +112,7 @@ const DataViewPage = () => {
 			>
 				<Radio.Button value="all">Просмотр всех данных</Radio.Button>
 				<Radio.Button value="feed">Просмотр корма</Radio.Button>
+				<Radio.Button value="house">Просмотр домиков</Radio.Button>
 			</Radio.Group>
 			<RangePicker
 				style={{ marginBottom: 16 }}
@@ -202,14 +131,48 @@ const DataViewPage = () => {
 			/>
 			<Table
 				scroll={{ x: 100 }}
-				columns={selectedDataSource === "all" ? columns : columnsFeed}
+				columns={
+					selectedDataSource === "all"
+						? columns
+						: selectedDataSource === "feed"
+						? columnsFeed
+						: columnsHouse(showModal)
+				}
 				dataSource={
 					selectedDataSource === "all"
 						? transformData(rowData)
-						: transformData(rowData2)
+						: selectedDataSource === "feed"
+						? transformData(rowData2)
+						: transformData(houseData)
 				}
 				key={rowData.key}
 			/>
+
+			<Modal
+				title="Изменить домик"
+				open={visible}
+				onOk={handleOk}
+				onCancel={handleCancel}
+			>
+				<div>
+					<label>Наименование домика:</label>
+					<Input
+						value={formValues.name || ""}
+						onChange={(e) =>
+							setFormValues({ ...formValues, name: e.target.value })
+						}
+						style={{ marginBottom: 16 }}
+					/>
+					<label>Количество голов в домике:</label>
+					<Input
+						value={formValues.cowsCount || ""}
+						onChange={(e) =>
+							setFormValues({ ...formValues, cowsCount: e.target.value })
+						}
+						style={{ marginBottom: 16 }}
+					/>
+				</div>
+			</Modal>
 		</div>
 	);
 };

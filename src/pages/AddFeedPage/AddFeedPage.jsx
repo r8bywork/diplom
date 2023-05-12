@@ -1,4 +1,4 @@
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 
@@ -31,6 +31,9 @@ const AddFeedPage = () => {
 				"http://localhost:3001/feedAndAddivitives/update",
 				feedAndAddivitives
 			);
+			response.status === 200
+				? message.success("Вы успешно добавили новый вид корма!")
+				: message.success("Ошибка!");
 			return response.data;
 		} catch (error) {
 			throw new Error(error.response.data);

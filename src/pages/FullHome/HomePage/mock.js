@@ -1,4 +1,3 @@
-import hutch_number from "../../../assets/hutch_number.jpeg";
 import meet from "../../../assets/meet.webp";
 import milk_consumption from "../../../assets/milk_consumption.jpeg";
 import milk_production from "../../../assets/milk_production.jpeg";
@@ -103,26 +102,22 @@ export const cards = [
 			},
 		],
 	},
-	{
-		id: 7,
-		title: "Кол-во телят в домике",
-		image: hutch_number,
-		fields: [
-			{
-				label: "Выберите домик",
-				key: "hutch_number",
-				type: "select",
-				options: [
-					{ label: "Домик 1", value: "1" },
-					{ label: "Домик 2", value: "2" },
-					{ label: "Домик 3", value: "3" },
-				],
-			},
-			{
-				label: "Кол-во телят",
-				key: "calves_per_hutch",
-				type: "number",
-			},
-		],
-	},
+	// {
+	// 	id: 7,
+	// 	title: "Кол-во телят в домике",
+	// 	image: hutch_number,
+	// 	fields: [
+	// 		{
+	// 			label: "Выберите домик",
+	// 			key: "hutch_number",
+	// 			type: "select",
+	// 			options: [],
+	// 		},
+	// 		{
+	// 			label: "Кол-во телят",
+	// 			key: "calves_per_hutch",
+	// 			type: "number",
+	// 		},
+	// 	],
+	// },
 ];
