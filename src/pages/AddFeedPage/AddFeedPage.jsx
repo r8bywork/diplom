@@ -1,11 +1,13 @@
-import { Button, Input, message } from "antd";
+import { Button, Form, Input, Radio, message } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
+import { AddHouse } from "../AddHouse/AddHouse";
 
 const AddFeedPage = () => {
 	const [name, setFeedType] = useState("");
 	const [balance, setRemainingAmount] = useState("");
 	const [daily_requirement, setDailyRequirement] = useState("");
+	const [selectedDataSource, setSelectedDataSource] = useState("new_feed");
 
 	const handleFeedTypeChange = (event) => {
 		setFeedType(event.target.value);
@@ -25,7 +27,6 @@ const AddFeedPage = () => {
 			balance,
 			daily_requirement,
 		};
-		// console.log("Feed added:", { name, balance, daily_requirement });
 		try {
 			const response = await axios.post(
 				"http://localhost:3001/feedAndAddivitives/update",
@@ -40,47 +41,46 @@ const AddFeedPage = () => {
 		}
 	};
 
+	const handleDataSourceChange = (e) => {
+		setSelectedDataSource(e.target.value);
+	};
+
 	return (
-		<form
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				maxWidth: "100%",
-				// maxWidth: "700px",
-				margin: "auto",
-			}}
-			onSubmit={(e) => e.preventDefault()}
-		>
-			<h1>Добавление комбикорма и добавок</h1>
-			<div style={{ marginBottom: "16px", width: "100%" }}>
-				<label style={{ marginRight: "16px" }}>Наимнование:</label>
-				<Input
-					style={{ flex: "1" }}
-					value={name}
-					onChange={handleFeedTypeChange}
-				/>
-			</div>
-			<div style={{ marginBottom: "16px", width: "100%" }}>
-				<label style={{ marginRight: "16px" }}>Количество:</label>
-				<Input
-					style={{ flex: "1" }}
-					value={balance}
-					onChange={handleRemainingAmountChange}
-				/>
-			</div>
-			<div style={{ marginBottom: "16px", width: "100%" }}>
-				<label style={{ marginRight: "16px" }}>Дневная потребность:</label>
-				<Input
-					style={{ flex: "1" }}
-					value={daily_requirement}
-					onChange={handleDailyRequirementChange}
-				/>
-			</div>
-			<Button type="primary" onClick={handleAddFeed}>
-				Добавить комбикорм
-			</Button>
-		</form>
+		<>
+			<Radio.Group
+				onChange={handleDataSourceChange}
+				value={selectedDataSource}
+				style={{ paddingRight: 25 }}
+			>
+				<Radio.Button value="new_feed">Добавить корм</Radio.Button>
+				<Radio.Button value="new_house">Добавить домик</Radio.Button>
+			</Radio.Group>
+
+			{selectedDataSource === "new_feed" ? (
+				<Form onFinish={handleAddFeed}>
+					<h1>Добавление комбикорма и добавок</h1>
+					<Form.Item label="Наимнование:" name="name">
+						<Input value={name} onChange={handleFeedTypeChange} />
+					</Form.Item>
+					<Form.Item label="Количество:" name="balance">
+						<Input value={balance} onChange={handleRemainingAmountChange} />
+					</Form.Item>
+					<Form.Item label="Дневная потребность:" name="daily_requirement">
+						<Input
+							value={daily_requirement}
+							onChange={handleDailyRequirementChange}
+						/>
+					</Form.Item>
+					<Form.Item>
+						<Button type="primary" htmlType="submit">
+							Добавить комбикорм
+						</Button>
+					</Form.Item>
+				</Form>
+			) : (
+				<AddHouse />
+			)}
+		</>
 	);
 };
 

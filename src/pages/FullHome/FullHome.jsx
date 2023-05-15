@@ -14,7 +14,8 @@ const FullHome = () => {
 			label: "Главная страница",
 			component: <HomePage />,
 		},
-		{ key: "2", label: "Добавить корма", component: <AddFeedPage /> },
+		{ key: "2", label: "Добавление данных", component: <AddFeedPage /> },
+		// { key: "3", label: "Добавить домик", component: <AddHouse /> },
 		{ key: "3", label: "Просмотр всех данных", component: <DataViewPage /> },
 		{ key: "4", label: "Настройки профиля", component: <SettingsPage /> },
 	];

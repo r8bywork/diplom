@@ -18,7 +18,9 @@ const DataViewPage = () => {
 	);
 
 	const [visible, setVisible] = useState(false);
+	const [visibleFeed, setVisibleFeed] = useState(false);
 	const [selectedHouse, setSelectedHouse] = useState(null);
+	const [selectedFeed, setSelectedFeed] = useState(null);
 	const [formValues, setFormValues] = useState({});
 
 	const showModal = (record) => {
@@ -31,8 +33,20 @@ const DataViewPage = () => {
 		setVisible(true);
 	};
 
+	const showModalFeed = (record) => {
+		setSelectedFeed(record);
+		setFormValues({
+			name: record.name,
+			balance: record.balance,
+			daily_requirement: record.daily_requirement,
+		});
+		console.log(formValues);
+		setVisibleFeed(true);
+	};
+
 	const handleCancel = () => {
 		setVisible(false);
+		setVisibleFeed(false);
 		setFormValues({});
 	};
 
@@ -48,6 +62,28 @@ const DataViewPage = () => {
 				? message.success("Вы успешно обновили данные!")
 				: message.error("Ошибка!");
 			setVisible(false);
+			setFormValues({});
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	const handleFeedOk = async () => {
+		try {
+			console.log(formValues);
+			console.log(selectedFeed);
+			const response = await axios.put(
+				`http://localhost:3001/feedAndAddivitives/change`,
+				{
+					feed: {
+						feedId: selectedFeed._id,
+						...formValues,
+					},
+				}
+			);
+			response.status === 200
+				? message.success("Вы успешно обновили данные!")
+				: message.error("Ошибка!");
+			setVisibleFeed(false);
 			setFormValues({});
 		} catch (error) {
 			console.error(error);
@@ -135,7 +171,7 @@ const DataViewPage = () => {
 					selectedDataSource === "all"
 						? columns
 						: selectedDataSource === "feed"
-						? columnsFeed
+						? columnsFeed(showModalFeed)
 						: columnsHouse(showModal)
 				}
 				dataSource={
@@ -168,6 +204,42 @@ const DataViewPage = () => {
 						value={formValues.cowsCount || ""}
 						onChange={(e) =>
 							setFormValues({ ...formValues, cowsCount: e.target.value })
+						}
+						style={{ marginBottom: 16 }}
+					/>
+				</div>
+			</Modal>
+			<Modal
+				title="Изменить корм"
+				open={visibleFeed}
+				onOk={handleFeedOk}
+				onCancel={handleCancel}
+			>
+				<div>
+					<label>Наименование корма:</label>
+					<Input
+						value={formValues.name || ""}
+						onChange={(e) =>
+							setFormValues({ ...formValues, name: e.target.value })
+						}
+						style={{ marginBottom: 16 }}
+					/>
+					<label>Количество:</label>
+					<Input
+						value={formValues.balance || ""}
+						onChange={(e) =>
+							setFormValues({ ...formValues, balance: e.target.value })
+						}
+						style={{ marginBottom: 16 }}
+					/>
+					<label>Остаток на день:</label>
+					<Input
+						value={formValues.daily_requirement || ""}
+						onChange={(e) =>
+							setFormValues({
+								...formValues,
+								daily_requirement: e.target.value,
+							})
 						}
 						style={{ marginBottom: 16 }}
 					/>

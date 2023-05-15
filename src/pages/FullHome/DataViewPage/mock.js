@@ -49,11 +49,11 @@ export const columns = [
 	// 	dataIndex: "calves_per_hutch",
 	// 	key: "calves_per_hutch",
 	// },
-	// {
-	// 	title: "Аборты",
-	// 	dataIndex: "abortions",
-	// 	key: "abortions",
-	// },
+	{
+		title: "Аборты",
+		dataIndex: "abortions",
+		key: "abortions",
+	},
 	{
 		width: "auto",
 		title: "Падеж молодняка",
@@ -158,7 +158,7 @@ export const columnsHouse = (showModal) => [
 	},
 ];
 
-export const columnsFeed = [
+export const columnsFeed = (showModalFeed) => [
 	{
 		title: "Наименование",
 		dataIndex: "name",
@@ -178,20 +178,28 @@ export const columnsFeed = [
 		title: "Действия",
 		key: "actions",
 		render: (_, record) => (
-			<Button
-				onClick={async () => {
-					try {
-						console.log(record._id);
-						await axios.delete(
-							`http://localhost:3001/feedAndAddivitives/${record._id}`
-						);
-					} catch (err) {
-						console.log(err);
-					}
-				}}
-			>
-				Удалить
-			</Button>
+			<>
+				<Button
+					onClick={() => showModalFeed(record)}
+					style={{ marginRight: 8 }}
+				>
+					Изменить
+				</Button>
+				<Button
+					onClick={async () => {
+						try {
+							console.log(record._id);
+							await axios.delete(
+								`http://localhost:3001/feedAndAddivitives/${record._id}`
+							);
+						} catch (err) {
+							console.log(err);
+						}
+					}}
+				>
+					Удалить
+				</Button>
+			</>
 		),
 	},
 ];
