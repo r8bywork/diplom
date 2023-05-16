@@ -1,7 +1,9 @@
-import { DatePicker, Input, Modal, Radio, Table, message } from "antd";
+import { Button, DatePicker, Input, Modal, Radio, Table, message } from "antd";
 import axios from "axios";
 import dayjs from "dayjs";
+import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
 import { columns, columnsFeed, columnsHouse } from "./mock";
 const { RangePicker } = DatePicker;
 
@@ -67,6 +69,7 @@ const DataViewPage = () => {
 			console.error(error);
 		}
 	};
+
 	const handleFeedOk = async () => {
 		try {
 			console.log(formValues);
@@ -100,6 +103,7 @@ const DataViewPage = () => {
 					},
 				}
 			);
+			console.log(response.data);
 			setRowData(response.data);
 		};
 
@@ -108,7 +112,7 @@ const DataViewPage = () => {
 				"http://localhost:3001/feedAndAddivitives/find",
 				{}
 			);
-
+			console.log(response.data);
 			setRowData2(response.data[0].feed_and_additives);
 		};
 
@@ -137,6 +141,73 @@ const DataViewPage = () => {
 				key: item._id,
 			};
 		});
+	};
+
+	const exportToExcel = () => {
+		let exportData = [];
+		let columnsConfig = [];
+
+		if (selectedDataSource === "all" && rowData) {
+			exportData = transformData(rowData);
+			columnsConfig = columns;
+		} else if (selectedDataSource === "feed" && rowData2) {
+			exportData = transformData(rowData2);
+			columnsConfig = columnsFeed();
+		} else if (selectedDataSource === "house" && houseData) {
+			exportData = transformData(houseData);
+			columnsConfig = columnsHouse();
+		} else {
+			console.log("Invalid selected data source or missing data");
+			return;
+		}
+		// Remove the column with key "actions" from the columnsConfig
+		const filteredColumnsConfig = columnsConfig.filter(
+			(column) => column.key !== "actions"
+		);
+
+		// Convert data to worksheet format
+		const worksheet = convertToWorksheet(exportData, filteredColumnsConfig);
+
+		// Create a new workbook and add the worksheet
+		const workbook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+
+		// Convert the workbook to an Excel file
+		const excelBuffer = XLSX.write(workbook, {
+			bookType: "xlsx",
+			type: "array",
+		});
+
+		// Create a Blob object with the Excel content
+		const blob = new Blob([excelBuffer], {
+			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		});
+
+		// Save the file using FileSaver.js
+		saveAs(blob, "report.xlsx");
+	};
+
+	// Function to convert data to worksheet format
+	const convertToWorksheet = (data, columnsConfig) => {
+		const worksheetData = [];
+
+		// Add the column headers to the worksheet
+		const headerRow = columnsConfig.map((column) => column.title);
+		worksheetData.push(headerRow);
+
+		// Add the data rows to the worksheet
+		data.forEach((item) => {
+			const rowData = columnsConfig.map((column) => {
+				const dataIndex = column.dataIndex;
+				return dataIndex ? item[dataIndex] : "";
+			});
+			worksheetData.push(rowData);
+		});
+
+		// Convert the worksheet data to a worksheet object
+		const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+		return worksheet;
 	};
 
 	return (
@@ -183,6 +254,10 @@ const DataViewPage = () => {
 				}
 				key={rowData.key}
 			/>
+
+			<Button type="primary" onClick={exportToExcel}>
+				Экспорт в Excel
+			</Button>
 
 			<Modal
 				title="Изменить домик"

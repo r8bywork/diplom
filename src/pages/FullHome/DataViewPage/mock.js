@@ -91,37 +91,6 @@ export const columns = [
 	// },
 ];
 
-// export const columnsHouse = [
-// 	{
-// 		title: "Наименование домикаы",
-// 		dataIndex: "name",
-// 		key: "name",
-// 	},
-// 	{
-// 		title: "Количество голов в домике",
-// 		dataIndex: "cowsCount",
-// 		key: "cowsCount",
-// 	},
-// 	{
-// 		title: "Действия",
-// 		key: "actions",
-// 		render: (_, record) => (
-// 			<Button
-// 				onClick={async () => {
-// 					try {
-// 						console.log(record._id);
-// 						await axios.put(`http://localhost:3001/houses/${record._id}`);
-// 					} catch (err) {
-// 						console.log(err);
-// 					}
-// 				}}
-// 			>
-// 				Удалить
-// 			</Button>
-// 		),
-// 	},
-// ];
-
 export const columnsHouse = (showModal) => [
 	{
 		title: "Наименование домикаы",

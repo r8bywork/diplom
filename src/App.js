@@ -4,6 +4,7 @@ import { AddFeedPage } from "./pages/AddFeedPage/AddFeedPage";
 import { FullHome } from "./pages/FullHome/FullHome";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { RegistrationForm } from "./pages/RegistrationForm/RegistrationForm";
+import { Report } from "./pages/Report/Report";
 import { SettingsPage } from "./pages/SettingsPage/SettingsPage";
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/feed" element={<AddFeedPage />} />
 					<Route path="/settings" element={<SettingsPage />} />
+					<Route path="/report" element={<Report />} />
 				</Routes>
 			</Router>
 		</div>

@@ -62,7 +62,7 @@ const AddFeedPage = () => {
 					<Form.Item label="Наимнование:" name="name">
 						<Input value={name} onChange={handleFeedTypeChange} />
 					</Form.Item>
-					<Form.Item label="Количество:" name="balance">
+					<Form.Item label="Остаток:" name="balance">
 						<Input value={balance} onChange={handleRemainingAmountChange} />
 					</Form.Item>
 					<Form.Item label="Дневная потребность:" name="daily_requirement">
