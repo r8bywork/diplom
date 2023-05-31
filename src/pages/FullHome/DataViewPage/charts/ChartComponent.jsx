@@ -1,7 +1,16 @@
+import {
+	BarController,
+	BarElement,
+	CategoryScale,
+	Chart,
+	LinearScale,
+} from "chart.js";
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
 const ChartComponent = ({ data, title }) => {
+	Chart.register(LinearScale);
+	Chart.register(BarController, BarElement, CategoryScale);
 	console.log(data);
 	// Извлечь значения из массива объектов
 	const labels = Object.keys(data[0]).filter(
@@ -33,7 +42,7 @@ const ChartComponent = ({ data, title }) => {
 		scales: {
 			y: {
 				beginAtZero: true,
-				stacked: true, // Стековая диаграмма, если требуется
+				stacked: false, // Стековая диаграмма, если требуется
 			},
 		},
 	};
@@ -42,13 +51,13 @@ const ChartComponent = ({ data, title }) => {
 };
 
 // Вспомогательная функция для генерации случайного цвета
-function getRandomColor() {
+const getRandomColor = () => {
 	const letters = "0123456789ABCDEF";
 	let color = "#";
 	for (let i = 0; i < 6; i++) {
 		color += letters[Math.floor(Math.random() * 16)];
 	}
 	return color;
-}
+};
 
 export default ChartComponent;

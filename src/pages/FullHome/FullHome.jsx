@@ -16,10 +16,9 @@ const FullHome = () => {
 			component: <HomePage />,
 		},
 		{ key: "2", label: "Добавление данных", component: <AddFeedPage /> },
-		// { key: "3", label: "Добавить домик", component: <AddHouse /> },
 		{ key: "3", label: "Просмотр всех данных", component: <DataViewPage /> },
-		{ key: "4", label: "Настройки профиля", component: <SettingsPage /> },
-		{ key: "5", label: "Поломки", component: <BreakdownListPage /> },
+		{ key: "4", label: "Поломки", component: <BreakdownListPage /> },
+		{ key: "5", label: "Настройки профиля", component: <SettingsPage /> },
 	];
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();

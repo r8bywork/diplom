@@ -128,8 +128,8 @@ const DataViewPage = () => {
 			? fetchData()
 			: selectedDataSource === "feed"
 			? fetchDataFeed()
-			: selectedDataSource === "house" ?? fetchHouseData();
-	}, [selectedDataSource, startDate, endDate, houseData]);
+			: selectedDataSource === "house" && fetchHouseData();
+	}, [selectedDataSource, startDate, endDate]);
 
 	const handleDataSourceChange = (e) => {
 		setSelectedDataSource(e.target.value);
