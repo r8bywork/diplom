@@ -39,6 +39,8 @@ const SettingsPage = () => {
 	};
 
 	const handleLogout = () => {
+		localStorage.removeItem("id");
+		localStorage.removeItem("username");
 		localStorage.removeItem("token");
 		message.success("Вы успешно вышли из приложения");
 		navigate("/login");

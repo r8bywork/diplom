@@ -8,6 +8,7 @@ const AddHouse = () => {
 
 	const handleSave = async () => {
 		try {
+			const id = localStorage.getItem("username");
 			const requestBody = {
 				houses: [
 					{
@@ -15,6 +16,7 @@ const AddHouse = () => {
 						cowsCount: cowsCount,
 					},
 				],
+				username: id,
 			};
 
 			const response = await axios.post(

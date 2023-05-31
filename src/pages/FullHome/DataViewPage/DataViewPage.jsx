@@ -4,9 +4,7 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-import ChartComponent from "./charts/ChartComponent";
-import ChartComponent2 from "./charts/ChartComponent2";
-import ChartComponent3 from "./charts/ChartComponent3";
+
 import { columns, columnsFeed, columnsHouse } from "./mock";
 const { RangePicker } = DatePicker;
 
@@ -111,17 +109,30 @@ const DataViewPage = () => {
 		};
 
 		const fetchDataFeed = async () => {
+			const userId = localStorage.getItem("id");
 			const response = await axios.get(
 				"http://localhost:3001/feedAndAddivitives/find",
-				{}
+				{
+					params: { userId },
+				}
 			);
 			console.log(response.data);
-			setRowData2(response.data[0].feed_and_additives);
+			setRowData2(response.data.feed_and_additives);
 		};
 
 		const fetchHouseData = async () => {
-			const response = await axios.get("http://localhost:3001/houses", {});
-			setHouseData(response.data[0].houses);
+			const userId = localStorage.getItem("id"); // Replace with your user ID or retrieve it from a variable/storage
+
+			try {
+				const response = await axios.get("http://localhost:3001/houses/get", {
+					params: { userId },
+				});
+
+				console.log(response.data);
+				setHouseData(response.data.houses);
+			} catch (error) {
+				console.error(error);
+			}
 		};
 
 		selectedDataSource === "all"
@@ -138,7 +149,7 @@ const DataViewPage = () => {
 	};
 
 	const transformData = (data) => {
-		return data.map((item) => {
+		return data?.map((item) => {
 			return {
 				...item,
 				key: item._id,
@@ -264,17 +275,17 @@ const DataViewPage = () => {
 				Экспорт в Excel
 			</Button>
 
-			{selectedDataSource === "all" && rowData.length > 0 && (
+			{/* {selectedDataSource === "all" && rowData.length > 0 && (
 				<ChartComponent data={rowData} title={columns} />
 			)}
 
-			{selectedDataSource === "feed" && rowData2.length > 0 && (
+			{selectedDataSource === "feed" && rowData2 && rowData2.length > 0 && (
 				<ChartComponent2 data={rowData2} />
 			)}
 
 			{selectedDataSource === "house" && houseData.length > 0 && (
 				<ChartComponent3 data={houseData} />
-			)}
+			)} */}
 
 			<Modal
 				title="Изменить домик"

@@ -23,7 +23,7 @@ const FullHome = () => {
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	const [currentMenu, setCurrentMenu] = useState(menuItems[0].key);
-
+	const [userData, setUserData] = useState(null);
 	const handleMenuClick = ({ key }) => {
 		setCurrentMenu(key);
 	};
@@ -44,7 +44,21 @@ const FullHome = () => {
 			setLoading(false);
 		};
 
+		const fetchUserData = async () => {
+			const token = localStorage.getItem("token");
+			const response = await axios.get("http://localhost:3001/auth/get", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			setUserData(response.data);
+			console.log(response.data);
+			localStorage.setItem("id", response.data.user._id);
+			localStorage.setItem("username", response.data.user.username);
+		};
+
 		checkAuthorization();
+		fetchUserData();
 	}, [navigate]);
 
 	if (loading) {

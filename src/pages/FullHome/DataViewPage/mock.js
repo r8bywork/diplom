@@ -114,7 +114,7 @@ export const columnsHouse = (showModal) => [
 					onClick={async () => {
 						try {
 							console.log(record._id);
-							await axios.put(`http://localhost:3001/houses/${record._id}`);
+							await axios.delete(`http://localhost:3001/houses/${record._id}`);
 						} catch (err) {
 							console.log(err);
 						}

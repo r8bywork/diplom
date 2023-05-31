@@ -14,6 +14,7 @@ const LoginPage = () => {
 			});
 
 			if (response.status === 200) {
+				console.clear();
 				localStorage.setItem("token", response.data.token);
 				navigate("/");
 				message.success("Вы успешно вошли в приложение!");
