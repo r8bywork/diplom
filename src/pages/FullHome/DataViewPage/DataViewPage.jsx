@@ -4,6 +4,9 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
+import ChartComponent from "./charts/ChartComponent";
+import ChartComponent2 from "./charts/ChartComponent2";
+import ChartComponent3 from "./charts/ChartComponent3";
 import { columns, columnsFeed, columnsHouse } from "./mock";
 const { RangePicker } = DatePicker;
 
@@ -125,7 +128,7 @@ const DataViewPage = () => {
 			? fetchData()
 			: selectedDataSource === "feed"
 			? fetchDataFeed()
-			: fetchHouseData();
+			: selectedDataSource === "house" ?? fetchHouseData();
 	}, [selectedDataSource, startDate, endDate, houseData]);
 
 	const handleDataSourceChange = (e) => {
@@ -221,21 +224,23 @@ const DataViewPage = () => {
 				<Radio.Button value="feed">Просмотр корма</Radio.Button>
 				<Radio.Button value="house">Просмотр домиков</Radio.Button>
 			</Radio.Group>
-			<RangePicker
-				style={{ marginBottom: 16 }}
-				defaultValue={[
-					dayjs(startDate).startOf("day"),
-					dayjs(endDate).endOf("day"),
-				]}
-				onChange={(value, dateString) => {
-					const isoDates = dateString.map((date) =>
-						new Date(date).toISOString()
-					);
+			{selectedDataSource === "all" && (
+				<RangePicker
+					style={{ marginBottom: 16 }}
+					defaultValue={[
+						dayjs(startDate).startOf("day"),
+						dayjs(endDate).endOf("day"),
+					]}
+					onChange={(value, dateString) => {
+						const isoDates = dateString.map((date) =>
+							new Date(date).toISOString()
+						);
 
-					setStartDate(isoDates[0]);
-					setEndDate(isoDates[1]);
-				}}
-			/>
+						setStartDate(isoDates[0]);
+						setEndDate(isoDates[1]);
+					}}
+				/>
+			)}
 			<Table
 				scroll={{ x: 100 }}
 				columns={
@@ -258,6 +263,18 @@ const DataViewPage = () => {
 			<Button type="primary" onClick={exportToExcel}>
 				Экспорт в Excel
 			</Button>
+
+			{selectedDataSource === "all" && rowData.length > 0 && (
+				<ChartComponent data={rowData} title={columns} />
+			)}
+
+			{selectedDataSource === "feed" && rowData2.length > 0 && (
+				<ChartComponent2 data={rowData2} />
+			)}
+
+			{selectedDataSource === "house" && houseData.length > 0 && (
+				<ChartComponent3 data={houseData} />
+			)}
 
 			<Modal
 				title="Изменить домик"
