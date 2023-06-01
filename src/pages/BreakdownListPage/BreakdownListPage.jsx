@@ -68,7 +68,7 @@ const BreakdownListPage = () => {
 	return (
 		<div>
 			<h1>Список поломок</h1>
-			<Button type="primary" onClick={showModal}>
+			<Button type="primary" onClick={showModal} style={{ marginBottom: 15 }}>
 				Добавить поломку
 			</Button>
 			<Table dataSource={breakdowns} columns={columns} />

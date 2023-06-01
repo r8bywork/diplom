@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddFeedPage } from "../AddFeedPage/AddFeedPage";
+import AddWorkers from "../AddWorkers/AddWorkerks";
 import { BreakdownListPage } from "../BreakdownListPage/BreakdownListPage";
 import { SettingsPage } from "../SettingsPage/SettingsPage";
 import { DataViewPage } from "./DataViewPage/DataViewPage";
@@ -18,7 +19,8 @@ const FullHome = () => {
 		{ key: "2", label: "Добавление данных", component: <AddFeedPage /> },
 		{ key: "3", label: "Просмотр всех данных", component: <DataViewPage /> },
 		{ key: "4", label: "Поломки", component: <BreakdownListPage /> },
-		{ key: "5", label: "Настройки профиля", component: <SettingsPage /> },
+		{ key: "5", label: "Рабочие", component: <AddWorkers /> },
+		{ key: "6", label: "Настройки профиля", component: <SettingsPage /> },
 	];
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
