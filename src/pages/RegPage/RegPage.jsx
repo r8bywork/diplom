@@ -13,7 +13,7 @@ const RegPage = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = () => {
-		const userData = { login, password, email, companyName };
+		// const userData = { login, password, email, companyName };
 		// console.log(userData);
 		navigate("/home");
 	};

@@ -1,4 +1,4 @@
-import { Card, Input, Modal, Select } from "antd";
+import { Card, Input, Modal, Select, message } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 import "./HomePage.css";
@@ -17,80 +17,39 @@ const HomePage = () => {
 	};
 	const userId = localStorage.getItem("id");
 
-	// const handleOk = async () => {
-	// 	setVisible(false);
-	// 	console.log("Form data:", inputValues);
-
-	// 	try {
-	// 		const response = await axios.put(
-	// 			`http://localhost:3001/row/update/${userId}`,
-	// 			{
-	// 				dairies: [
-	// 					{
-	// 						date: new Date(),
-	// 						...inputValues,
-	// 					},
-	// 				],
-	// 			}
-	// 		);
-	// 		setInputValues({});
-	// 		return response.data;
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 		throw error;
-	// 	}
-	// };
-
 	const handleOk = async () => {
 		setVisible(false);
-		// console.log("Form data:", inputValues);
 		try {
-			const checkResponse = await axios.get(
-				`http://localhost:3001/row/get/${userId}`
+			const date = new Date();
+			const updateResponse = await axios.put(
+				`http://localhost:3001/row/update/${userId}`,
+				{
+					dairies: [
+						{
+							date: date.toISOString(),
+							milk_production: 0,
+							milk_truck_order: 0,
+							gross_yield: 0,
+							milk_consumption: 0,
+							heifers: 0,
+							cows: 0,
+							hutch_number: 0,
+							calves_per_hutch: 0,
+							abortions: 0,
+							young_animal_losses: 0,
+							stillbirths: 0,
+							losses_during_fattening_of_cows: 0,
+							losses_of_main_herd_cows: 0,
+							...inputValues,
+						},
+					],
+				}
 			);
-			if (checkResponse.data.message === "Today's dairy not found") {
-				const date = new Date();
-				const updateResponse = await axios.put(
-					`http://localhost:3001/row/update/${userId}`,
-					{
-						dairies: [
-							{
-								date: date.toISOString(),
-								milk_production: 0,
-								milk_truck_order: 0,
-								gross_yield: 0,
-								milk_consumption: 0,
-								heifers: 0,
-								cows: 0,
-								hutch_number: 0,
-								calves_per_hutch: 0,
-								abortions: 0,
-								young_animal_losses: 0,
-								stillbirths: 0,
-								losses_during_fattening_of_cows: 0,
-								losses_of_main_herd_cows: 0,
-								...inputValues,
-							},
-						],
-					}
-				);
-				setInputValues({});
-				return updateResponse.data;
-			} else {
-				const response = await axios.put(
-					`http://localhost:3001/row/update/${userId}`,
-					{
-						dairies: [
-							{
-								date: new Date(),
-								...inputValues,
-							},
-						],
-					}
-				);
-				setInputValues({});
-				return response.data;
-			}
+			setInputValues({});
+			updateResponse.status === 200
+				? message.success("Данные успешно добавлены")
+				: message.error("Ошибка");
+			return updateResponse.data;
 		} catch (error) {
 			console.error(error);
 			throw error;
