@@ -26,13 +26,15 @@ const SettingsPage = () => {
 	}
 	const onFinish = async (values) => {
 		try {
-			console.log(userData.user._id);
+			// console.log(userData.user._id);
 			const response = await axios.put(
 				`http://localhost:3001/user/${userData.user._id}`,
 				values
 			);
-			const updatedUser = response.data;
-			console.log(updatedUser);
+			response.status === 200
+				? message.success("Вы успешно поменяли данные")
+				: message.error("Ошибка");
+			// console.log(updatedUser);
 		} catch (error) {
 			console.error(error);
 		}

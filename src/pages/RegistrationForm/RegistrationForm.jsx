@@ -9,7 +9,7 @@ const RegistrationForm = () => {
 		const { username, password, email, phoneNumber, organizationName } = values;
 		console.clear();
 		try {
-			console.log("Success:", values);
+			// console.log("Success:", values);
 			const response = await axios.post("http://localhost:3001/auth/register", {
 				username,
 				password,

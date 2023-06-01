@@ -11,7 +11,7 @@ import { Bar } from "react-chartjs-2";
 const ChartComponent = ({ data, title }) => {
 	Chart.register(LinearScale);
 	Chart.register(BarController, BarElement, CategoryScale);
-	console.log(data);
+	// console.log(data);
 	// Извлечь значения из массива объектов
 	const labels = Object.keys(data[0]).filter(
 		(key) => key !== "_id" && key !== "createdAt" && key !== "updatedAt"

@@ -32,7 +32,7 @@ const DataViewPage = () => {
 			name: record.name,
 			cowsCount: record.cowsCount,
 		});
-		console.log(formValues);
+		// console.log(formValues);
 		setVisible(true);
 	};
 
@@ -43,7 +43,7 @@ const DataViewPage = () => {
 			balance: record.balance,
 			daily_requirement: record.daily_requirement,
 		});
-		console.log(formValues);
+		// console.log(formValues);
 		setVisibleFeed(true);
 	};
 
@@ -55,8 +55,8 @@ const DataViewPage = () => {
 
 	const handleOk = async () => {
 		try {
-			console.log(formValues);
-			console.log(selectedHouse);
+			// console.log(formValues);
+			// console.log(selectedHouse);
 			const response = await axios.put(`http://localhost:3001/houses/update`, {
 				houseId: selectedHouse._id,
 				...formValues,
@@ -73,8 +73,8 @@ const DataViewPage = () => {
 
 	const handleFeedOk = async () => {
 		try {
-			console.log(formValues);
-			console.log(selectedFeed);
+			// console.log(formValues);
+			// console.log(selectedFeed);
 			const response = await axios.put(
 				`http://localhost:3001/feedAndAddivitives/change`,
 				{
@@ -96,15 +96,17 @@ const DataViewPage = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			const userId = localStorage.getItem("id");
 			const response = await axios.get(
-				"http://localhost:3001/row/getAllByExpression",
+				`http://localhost:3001/row/getAllByExpression/${userId}`,
 				{
 					params: {
-						date: `${startDate};;${endDate}`,
+						startDate: `${startDate}`,
+						endDate: `${endDate}`,
 					},
 				}
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			setRowData(response.data);
 		};
 
@@ -116,7 +118,7 @@ const DataViewPage = () => {
 					params: { userId },
 				}
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			setRowData2(response.data.feed_and_additives);
 		};
 
@@ -128,7 +130,7 @@ const DataViewPage = () => {
 					params: { userId },
 				});
 
-				console.log(response.data);
+				// console.log(response.data);
 				setHouseData(response.data.houses);
 			} catch (error) {
 				console.error(error);

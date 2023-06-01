@@ -14,7 +14,7 @@ const RegPage = () => {
 
 	const handleSubmit = () => {
 		const userData = { login, password, email, companyName };
-		console.log(userData);
+		// console.log(userData);
 		navigate("/home");
 	};
 

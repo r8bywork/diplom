@@ -11,7 +11,7 @@ import React, { useEffect, useRef } from "react";
 
 const ChartComponent3 = ({ data }) => {
 	const chartRef = useRef(null);
-	console.log(data);
+	// console.log(data);
 
 	useEffect(() => {
 		Chart.register(
