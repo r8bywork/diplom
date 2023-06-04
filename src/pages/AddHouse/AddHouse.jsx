@@ -8,7 +8,7 @@ const AddHouse = () => {
 
 	const handleSave = async () => {
 		try {
-			const id = localStorage.getItem("username");
+			const id = localStorage.getItem("id");
 			const requestBody = {
 				houses: [
 					{

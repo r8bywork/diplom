@@ -1,4 +1,4 @@
-import { Menu } from "antd";
+import { Button, Menu, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,14 @@ import { DataViewPage } from "./DataViewPage/DataViewPage";
 import { HomePage } from "./HomePage/HomePage";
 
 const FullHome = () => {
+	const handleLogout = () => {
+		localStorage.removeItem("id");
+		localStorage.removeItem("username");
+		localStorage.removeItem("token");
+		message.success("Вы успешно вышли из приложения");
+		navigate("/login");
+	};
+	const roles = localStorage.getItem("role");
 	const menuItems = [
 		{
 			key: "1",
@@ -19,9 +27,24 @@ const FullHome = () => {
 		{ key: "2", label: "Добавление данных", component: <AddFeedPage /> },
 		{ key: "3", label: "Просмотр всех данных", component: <DataViewPage /> },
 		{ key: "4", label: "Поломки", component: <BreakdownListPage /> },
-		{ key: "5", label: "Рабочие", component: <AddWorkers /> },
-		{ key: "6", label: "Настройки профиля", component: <SettingsPage /> },
+		{
+			key: "7",
+			label: "Выход",
+			component: (
+				<Button type="primary" onClick={handleLogout} danger>
+					Выход
+				</Button>
+			),
+		},
 	];
+	const isAdmin = roles.includes("admin");
+	if (isAdmin) {
+		menuItems.push(
+			{ key: "5", label: "Рабочие", component: <AddWorkers /> },
+			{ key: "6", label: "Настройки профиля", component: <SettingsPage /> }
+		);
+	}
+
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	const [currentMenu, setCurrentMenu] = useState(menuItems[0].key);
@@ -33,11 +56,17 @@ const FullHome = () => {
 		const checkAuthorization = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				await axios.get("http://localhost:3001/auth/findUser", {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
+				const response = await axios.get(
+					"http://localhost:3001/auth/findUser",
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+				console.log(response);
+				localStorage.setItem("role", response.data);
+				console.log(localStorage.getItem("role"));
 			} catch (error) {
 				navigate("/login");
 				console.log(error);
@@ -52,8 +81,14 @@ const FullHome = () => {
 					Authorization: `Bearer ${token}`,
 				},
 			});
-			localStorage.setItem("id", response.data.user._id);
-			localStorage.setItem("username", response.data.user.username);
+			console.log(response);
+			if (response.data.worker) {
+				localStorage.setItem("id", response.data.worker._id);
+				// localStorage.setItem("username", response.data.worker.username);
+			} else {
+				localStorage.setItem("id", response.data.user._id);
+				localStorage.setItem("username", response.data.user.username);
+			}
 		};
 
 		checkAuthorization();

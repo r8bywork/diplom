@@ -248,8 +248,10 @@ const AddWorkers = () => {
 
 	useEffect(() => {
 		if (userData) {
-			const filteredData = userData.filter((user) =>
-				user.username.toLowerCase().includes(searchValue.toLowerCase())
+			const filteredData = userData.filter(
+				(user) =>
+					user.username.toLowerCase().includes(searchValue.toLowerCase()) ||
+					user.name.toLowerCase().includes(searchValue.toLowerCase())
 			);
 			setFilteredData(filteredData);
 		}
