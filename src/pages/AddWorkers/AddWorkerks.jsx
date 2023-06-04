@@ -20,6 +20,7 @@ const AddWorkers = () => {
 
 	const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 	const [editedUsername, setEditedUsername] = useState("");
+	const [name, setEditedName] = useState("");
 	const [editedPassword, setEditedPassword] = useState("");
 	const [editedWorkerId, setEditedWorkerId] = useState(null);
 
@@ -70,16 +71,22 @@ const AddWorkers = () => {
 
 	const columns = [
 		{
+			title: "Имя",
+			dataIndex: "name",
+			key: "name",
+			sorter: (a, b) => a.name.localeCompare(b.name), // Add sorter function for username column
+		},
+		{
 			title: "Логин",
 			dataIndex: "username",
 			key: "username",
 			sorter: (a, b) => a.username.localeCompare(b.username), // Add sorter function for username column
 		},
-		{
-			title: "Пароль",
-			dataIndex: "password",
-			key: "password",
-		},
+		// {
+		// 	title: "Пароль",
+		// 	dataIndex: "password",
+		// 	key: "password",
+		// },
 		{
 			title: "Роль",
 			dataIndex: "roles",
@@ -142,8 +149,9 @@ const AddWorkers = () => {
 		const editedWorker = userData.find((worker) => worker._id === id);
 
 		// Set the values of the worker to be edited in the state variables
+		setEditedName(editedWorker.name);
 		setEditedUsername(editedWorker.username);
-		setEditedPassword(editedWorker.password);
+		// setEditedPassword(editedWorker.password);
 		setEditedWorkerId(id);
 
 		// Show the edit modal
@@ -159,21 +167,37 @@ const AddWorkers = () => {
 	};
 
 	const handleEditSave = async () => {
+		if (!name || !editedUsername) {
+			message.error("Name and Username fields cannot be empty");
+			return;
+		}
 		// Make the request to update the worker
 		try {
-			const response = await axios.put("http://localhost:3001/worker/update", {
+			const requestBody = {
 				userId,
 				workerId: editedWorkerId,
 				workers: [
 					{
+						name: name,
 						username: editedUsername,
-						password: editedPassword,
 					},
 				],
-			});
+			};
+
+			// Добавьте проверку наличия нового пароля
+			if (editedPassword) {
+				requestBody.workers[0].password = editedPassword;
+			}
+
+			const response = await axios.put(
+				"http://localhost:3001/worker/update",
+				requestBody
+			);
+
 			response.status === 200
 				? message.success("Worker updated successfully!")
 				: message.error("Error updating worker!");
+
 			setIsEditModalVisible(false);
 			fetchData();
 		} catch (error) {
@@ -265,6 +289,7 @@ const AddWorkers = () => {
 
 		try {
 			const response = await axios.put("http://localhost:3001/worker/addRole", {
+				name,
 				userId,
 				workerId: workerId,
 				roles: roleToAdd,
@@ -334,11 +359,17 @@ const AddWorkers = () => {
 				</Checkbox.Group>
 			</Modal>
 			<Modal
-				title="Edit Worker"
+				title="Изменить рабочего"
 				open={isEditModalVisible}
 				onOk={handleEditSave}
 				onCancel={handleEditCancel}
 			>
+				<Input
+					placeholder="Name"
+					value={name}
+					onChange={(e) => setEditedName(e.target.value)}
+					style={{ marginBottom: 10 }}
+				/>
 				<Input
 					placeholder="Username"
 					value={editedUsername}
