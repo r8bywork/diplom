@@ -29,7 +29,6 @@ const AddWorkers = () => {
 			"http://localhost:3001/worker/deleteRole",
 			{
 				data: {
-					userId,
 					workerId: id,
 					roleIndex: index,
 				},
@@ -174,19 +173,14 @@ const AddWorkers = () => {
 		// Make the request to update the worker
 		try {
 			const requestBody = {
-				userId,
 				workerId: editedWorkerId,
-				workers: [
-					{
-						name: name,
-						username: editedUsername,
-					},
-				],
+				name: name,
+				username: editedUsername,
 			};
 
 			// Добавьте проверку наличия нового пароля
 			if (editedPassword) {
-				requestBody.workers[0].password = editedPassword;
+				requestBody.password = editedPassword;
 			}
 
 			const response = await axios.put(
@@ -199,6 +193,7 @@ const AddWorkers = () => {
 				: message.error("Error updating worker!");
 
 			setIsEditModalVisible(false);
+			setEditedPassword("");
 			fetchData();
 		} catch (error) {
 			message.error("Error updating worker");
@@ -208,13 +203,7 @@ const AddWorkers = () => {
 	const handleDelete = async (id) => {
 		try {
 			const response = await axios.delete(
-				"http://localhost:3001/worker/delete",
-				{
-					data: {
-						userId,
-						workerId: id,
-					},
-				}
+				`http://localhost:3001/worker/delete/${id}`
 			);
 			response.status === 200
 				? message.success("Пользователь успешно удален!")
@@ -230,11 +219,11 @@ const AddWorkers = () => {
 			const response = await axios.get(
 				`http://localhost:3001/worker/get/${userId}`
 			);
-			setUserData(response.data.workers.workers);
+			setUserData(response.data.workers);
 
 			// Extract unique roles from the users
 			const roles = Array.from(
-				new Set(response.data.workers.workers.flatMap((user) => user.roles))
+				new Set(response.data.workers.flatMap((user) => user.roles))
 			);
 			setRolesOptions(roles);
 		} catch (error) {
@@ -291,8 +280,6 @@ const AddWorkers = () => {
 
 		try {
 			const response = await axios.put("http://localhost:3001/worker/addRole", {
-				name,
-				userId,
 				workerId: workerId,
 				roles: roleToAdd,
 			});
@@ -338,7 +325,11 @@ const AddWorkers = () => {
 					dataSource={transformData(filteredData || userData)}
 				/>
 			)}
-			<CreateUserForm visible={isModalVisible} onCancel={handleCancel} />
+			<CreateUserForm
+				visible={isModalVisible}
+				onCancel={handleCancel}
+				fetchData={fetchData}
+			/>
 
 			<Modal
 				title="Добавить роли"
@@ -367,19 +358,19 @@ const AddWorkers = () => {
 				onCancel={handleEditCancel}
 			>
 				<Input
-					placeholder="Name"
+					placeholder="ФИО"
 					value={name}
 					onChange={(e) => setEditedName(e.target.value)}
 					style={{ marginBottom: 10 }}
 				/>
 				<Input
-					placeholder="Username"
+					placeholder="Логин"
 					value={editedUsername}
 					onChange={(e) => setEditedUsername(e.target.value)}
 					style={{ marginBottom: 10 }}
 				/>
 				<Input.Password
-					placeholder="Password"
+					placeholder="Пароль"
 					value={editedPassword}
 					onChange={(e) => setEditedPassword(e.target.value)}
 					style={{ marginBottom: 10 }}

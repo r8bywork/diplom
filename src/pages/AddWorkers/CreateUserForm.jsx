@@ -2,18 +2,14 @@ import { Form, Input, Modal, message } from "antd";
 import axios from "axios";
 import React from "react";
 
-const CreateUserForm = ({ visible, onCancel }) => {
+const CreateUserForm = ({ visible, onCancel, fetchData }) => {
 	const [form] = Form.useForm();
 	const userId = localStorage.getItem("id");
 
 	const createWorker = async (values) => {
 		try {
 			const body = {
-				worker: [
-					{
-						...values,
-					},
-				],
+				...values,
 			};
 
 			const response = await axios.post(
@@ -23,6 +19,8 @@ const CreateUserForm = ({ visible, onCancel }) => {
 			response.status === 200
 				? message.success("Пользователь успешно создан!")
 				: message.error("Ошибка!");
+			fetchData();
+			onCancel();
 		} catch (error) {
 			console.error("Error creating worker:", error);
 		}
@@ -50,6 +48,18 @@ const CreateUserForm = ({ visible, onCancel }) => {
 			}}
 		>
 			<Form form={form}>
+				<Form.Item
+					name="name"
+					label="ФИО"
+					rules={[
+						{
+							required: true,
+							message: "Пожалуйста, введите имя!",
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
 				<Form.Item
 					name="username"
 					label="Логин"

@@ -18,6 +18,7 @@ const FullHome = () => {
 		navigate("/login");
 	};
 	const roles = localStorage.getItem("role");
+	const isAdmin = roles.includes("admin");
 	const menuItems = [
 		{
 			key: "1",
@@ -37,7 +38,7 @@ const FullHome = () => {
 			),
 		},
 	];
-	const isAdmin = roles.includes("admin");
+
 	if (isAdmin) {
 		menuItems.push(
 			{ key: "5", label: "Рабочие", component: <AddWorkers /> },
