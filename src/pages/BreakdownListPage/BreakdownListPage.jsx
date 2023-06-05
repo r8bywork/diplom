@@ -9,6 +9,7 @@ const BreakdownListPage = () => {
 	const [form] = Form.useForm();
 	const [selectedFilters, setSelectedFilters] = useState([]);
 	const [isFilterDropdownVisible, setIsFilterDropdownVisible] = useState(false);
+	const [selectedBreakdown, setSelectedBreakdown] = useState(null);
 
 	const id = localStorage.getItem("id");
 
@@ -27,13 +28,17 @@ const BreakdownListPage = () => {
 		};
 
 		fetchBreakdowns();
-	}, []);
+	}, [id]);
 
-	const showModal = () => {
+	const showModal = (breakdown) => {
+		form.resetFields();
+		setSelectedBreakdown(breakdown);
 		setIsModalVisible(true);
 	};
 
 	const handleCancel = () => {
+		form.resetFields();
+		setSelectedBreakdown(null);
 		setIsModalVisible(false);
 	};
 
@@ -43,21 +48,44 @@ const BreakdownListPage = () => {
 			const workerId = localStorage.getItem("id");
 
 			try {
-				const response = await axios.post(
-					"http://localhost:3001/break/createBreak",
-					{
-						workerId,
-						description,
-					}
-				);
+				let response;
+				if (selectedBreakdown) {
+					response = await axios.put(
+						`http://localhost:3001/break/update/${selectedBreakdown._id}`,
+						{
+							description,
+						}
+					);
+				} else {
+					response = await axios.post(
+						"http://localhost:3001/break/createBreak",
+						{
+							workerId,
+							description,
+						}
+					);
+				}
+
 				const newBreakdown = response.data.breakdown;
 
-				setBreakdowns((prevBreakdowns) => [...prevBreakdowns, newBreakdown]);
+				let updatedBreakdowns;
+				if (selectedBreakdown) {
+					updatedBreakdowns = breakdowns.map((breakdown) => {
+						if (breakdown._id === selectedBreakdown._id) {
+							return { ...breakdown, description };
+						}
+						return breakdown;
+					});
+				} else {
+					updatedBreakdowns = [...breakdowns, newBreakdown];
+				}
+
+				setBreakdowns(updatedBreakdowns);
 				form.resetFields();
 				setIsModalVisible(false);
 			} catch (error) {
 				console.log(error);
-				throw new Error("Ошибка при создании поломки");
+				throw new Error("Ошибка при создании/изменении поломки");
 			}
 		});
 	};
@@ -93,17 +121,7 @@ const BreakdownListPage = () => {
 				throw new Error("Ошибка при удалении поломки");
 			}
 		} else {
-			try {
-				await axios.put(
-					`http://localhost:3001/break/breakdowns/${record._id}`,
-					{
-						status: value,
-					}
-				);
-			} catch (error) {
-				console.log(error);
-				throw new Error("Ошибка при обновлении статуса");
-			}
+			showModal(record);
 		}
 	};
 
@@ -164,12 +182,39 @@ const BreakdownListPage = () => {
 				</Select>
 			),
 		},
+		{
+			title: "Действия",
+			key: "actions",
+			render: (text, record) => {
+				const currentUser = id;
+				if (record.addedBy.toString() === currentUser) {
+					return (
+						<span>
+							<Button type="link" onClick={() => showModal(record)}>
+								Изменить
+							</Button>
+						</span>
+					);
+				}
+				return (
+					<span>
+						<Button type="link" disabled>
+							Изменить
+						</Button>
+					</span>
+				);
+			},
+		},
 	];
 
 	return (
 		<div>
 			<h1>Список поломок</h1>
-			<Button type="primary" onClick={showModal} style={{ marginBottom: 15 }}>
+			<Button
+				type="primary"
+				onClick={() => showModal(null)}
+				style={{ marginBottom: 15 }}
+			>
 				Добавить поломку
 			</Button>
 			<Table
@@ -179,7 +224,9 @@ const BreakdownListPage = () => {
 			/>
 
 			<Modal
-				title="Добавление новой поломки"
+				title={
+					selectedBreakdown ? "Изменение поломки" : "Добавление новой поломки"
+				}
 				open={isModalVisible}
 				onCancel={handleCancel}
 				footer={[
@@ -187,7 +234,7 @@ const BreakdownListPage = () => {
 						Отменить
 					</Button>,
 					<Button key="add" type="primary" onClick={handleAddBreakdown}>
-						Добавить
+						{selectedBreakdown ? "Изменить" : "Добавить"}
 					</Button>,
 				]}
 			>
@@ -195,6 +242,7 @@ const BreakdownListPage = () => {
 					<Form.Item
 						name="description"
 						label="Описание"
+						initialValue={selectedBreakdown && ""}
 						rules={[
 							{ required: true, message: "Пожалуйста, заполните описание" },
 						]}
