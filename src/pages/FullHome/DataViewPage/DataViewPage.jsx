@@ -4,7 +4,9 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-
+import ChartComponent from "./charts/ChartComponent";
+import ChartComponent2 from "./charts/ChartComponent2";
+import ChartComponent3 from "./charts/ChartComponent3";
 import { columns, columnsFeed, columnsHouse } from "./mock";
 const { RangePicker } = DatePicker;
 
@@ -106,7 +108,6 @@ const DataViewPage = () => {
 					},
 				}
 			);
-			// console.log(response.data);
 			setRowData(response.data);
 		};
 
@@ -118,7 +119,6 @@ const DataViewPage = () => {
 					params: { userId },
 				}
 			);
-			// console.log(response.data);
 			setRowData2(response.data.feed_and_additives);
 		};
 
@@ -277,7 +277,7 @@ const DataViewPage = () => {
 				Экспорт в Excel
 			</Button>
 
-			{/* {selectedDataSource === "all" && rowData.length > 0 && (
+			{selectedDataSource === "all" && rowData.length > 0 && (
 				<ChartComponent data={rowData} title={columns} />
 			)}
 
@@ -287,7 +287,7 @@ const DataViewPage = () => {
 
 			{selectedDataSource === "house" && houseData.length > 0 && (
 				<ChartComponent3 data={houseData} />
-			)} */}
+			)}
 
 			<Modal
 				title="Изменить домик"

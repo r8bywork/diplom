@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, message } from "antd";
+import { Button, Form, Input, message } from "antd";
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,9 +64,9 @@ const LoginPage = () => {
 					<Input.Password />
 				</Form.Item>
 
-				<Form.Item name="remember" valuePropName="checked">
+				{/* <Form.Item name="remember" valuePropName="checked">
 					<Checkbox>Запомнить данные</Checkbox>
-				</Form.Item>
+				</Form.Item> */}
 
 				<Form.Item>
 					<Button type="primary" htmlType="submit">
@@ -75,7 +75,6 @@ const LoginPage = () => {
 					<Button type="link" onClick={() => navigate("/registration")}>
 						Зарегистрироваться
 					</Button>
-					{/* <Button type="link">Забыли пароль?</Button> */}
 				</Form.Item>
 			</Form>
 		</div>
