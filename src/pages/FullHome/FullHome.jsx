@@ -1,4 +1,4 @@
-import { Button, Menu, message } from "antd";
+import { Menu, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -28,23 +28,17 @@ const FullHome = () => {
 		{ key: "2", label: "Добавление данных", component: <AddFeedPage /> },
 		{ key: "3", label: "Просмотр всех данных", component: <DataViewPage /> },
 		{ key: "4", label: "Поломки", component: <BreakdownListPage /> },
-		{
-			key: "7",
-			label: "Выход",
-			component: (
-				<Button type="primary" onClick={handleLogout} danger>
-					Выход
-				</Button>
-			),
-		},
 	];
 
 	if (isAdmin) {
-		menuItems.push(
-			{ key: "5", label: "Рабочие", component: <AddWorkers /> },
-			{ key: "6", label: "Настройки профиля", component: <SettingsPage /> }
-		);
+		menuItems.push({ key: "5", label: "Рабочие", component: <AddWorkers /> });
 	}
+
+	menuItems.push({
+		key: "6",
+		label: "Настройки профиля",
+		component: <SettingsPage />,
+	});
 
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
@@ -65,9 +59,9 @@ const FullHome = () => {
 						},
 					}
 				);
-				console.log(response);
+				// console.log(response);
 				localStorage.setItem("role", response.data);
-				console.log(localStorage.getItem("role"));
+				// console.log(localStorage.getItem("role"));
 			} catch (error) {
 				navigate("/login");
 				console.log(error);
@@ -82,7 +76,7 @@ const FullHome = () => {
 					Authorization: `Bearer ${token}`,
 				},
 			});
-			console.log(response);
+			// console.log(response);
 			if (response.data.worker) {
 				localStorage.setItem("id", response.data.worker._id);
 				// localStorage.setItem("username", response.data.worker.username);

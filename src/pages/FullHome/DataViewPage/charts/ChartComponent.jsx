@@ -7,42 +7,35 @@ import {
 } from "chart.js";
 import React from "react";
 import { Bar } from "react-chartjs-2";
-
 const ChartComponent = ({ data, title }) => {
+	const formatDate = (dateString) => {
+		const date = new Date(dateString);
+		const formattedDate = date.toLocaleDateString("ru-RU", {
+			day: "numeric",
+			month: "numeric",
+			year: "numeric",
+		});
+		return formattedDate;
+	};
+
 	Chart.register(LinearScale);
 	Chart.register(BarController, BarElement, CategoryScale);
-	// console.log(data);
-	// Извлечь значения из массива объектов
-	const labels = Object.keys(data[0]).filter(
-		(key) => key !== "_id" && key !== "createdAt" && key !== "updatedAt"
-	);
-	const datasets = [];
-
-	// Создать набор данных для каждого свойства объекта
-	for (let i = 0; i < labels.length; i++) {
-		const label = labels[i];
-		const values = data.map((item) => item[label]);
-		const backgroundColor = getRandomColor(); // Генерировать случайный цвет для каждого набора данных
-
-		datasets.push({
-			label: label,
-			data: values,
-			backgroundColor: backgroundColor,
-		});
-	}
-
-	// Настройки графика
 	const chartData = {
-		labels: labels,
-		datasets: datasets,
+		labels: title.map((item) => item.title),
+		datasets: data.map((dataset) => ({
+			label: formatDate(dataset.date),
+			data: title.map((item) => dataset[item.dataIndex]),
+			backgroundColor: getRandomColor(),
+		})),
 	};
+	console.log(chartData, title);
 
 	const chartOptions = {
 		responsive: true,
 		scales: {
 			y: {
 				beginAtZero: true,
-				stacked: false, // Стековая диаграмма, если требуется
+				stacked: false,
 			},
 		},
 	};

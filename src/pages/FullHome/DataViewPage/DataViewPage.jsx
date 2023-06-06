@@ -57,8 +57,6 @@ const DataViewPage = () => {
 
 	const handleOk = async () => {
 		try {
-			// console.log(formValues);
-			// console.log(selectedHouse);
 			const response = await axios.put(`http://localhost:3001/houses/update`, {
 				houseId: selectedHouse._id,
 				...formValues,
@@ -75,8 +73,6 @@ const DataViewPage = () => {
 
 	const handleFeedOk = async () => {
 		try {
-			// console.log(formValues);
-			// console.log(selectedFeed);
 			const response = await axios.put(
 				`http://localhost:3001/feedAndAddivitives/change`,
 				{
@@ -130,7 +126,6 @@ const DataViewPage = () => {
 					params: { userId },
 				});
 
-				// console.log(response.data);
 				setHouseData(response.data.houses);
 			} catch (error) {
 				console.error(error);

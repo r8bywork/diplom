@@ -1,6 +1,16 @@
 import { Button } from "antd";
 import axios from "axios";
 
+const formatDate = (dateString) => {
+	const date = new Date(dateString);
+	const formattedDate = date.toLocaleDateString("ru-RU", {
+		day: "numeric",
+		month: "numeric",
+		year: "numeric",
+	});
+	return formattedDate;
+};
+
 export const columns = [
 	{
 		width: "auto",
@@ -38,17 +48,6 @@ export const columns = [
 		dataIndex: "cows",
 		key: "cows",
 	},
-	// {
-	// 	width: "auto",
-	// 	title: "Номер домика",
-	// 	dataIndex: "hutch_number",
-	// 	key: "hutch_number",
-	// },
-	// {
-	// 	title: "Кол-во в домике",
-	// 	dataIndex: "calves_per_hutch",
-	// 	key: "calves_per_hutch",
-	// },
 	{
 		title: "Аборты",
 		dataIndex: "abortions",
@@ -81,14 +80,10 @@ export const columns = [
 	{
 		width: "auto",
 		title: "Дата создания",
-		dataIndex: "createdAt",
-		key: "createdAt",
+		dataIndex: "date",
+		key: "date",
+		render: (text) => formatDate(text),
 	},
-	// {
-	// 	title: "Updated At",
-	// 	dataIndex: "updatedAt",
-	// 	key: "updatedAt",
-	// },
 ];
 
 export const columnsHouse = (showModal) => [
