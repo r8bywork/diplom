@@ -1,4 +1,4 @@
-import { Menu, message } from "antd";
+import { Menu } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,13 +10,6 @@ import { DataViewPage } from "./DataViewPage/DataViewPage";
 import { HomePage } from "./HomePage/HomePage";
 
 const FullHome = () => {
-	const handleLogout = () => {
-		localStorage.removeItem("id");
-		localStorage.removeItem("username");
-		localStorage.removeItem("token");
-		message.success("Вы успешно вышли из приложения");
-		navigate("/login");
-	};
 	const roles = localStorage.getItem("role");
 	const isAdmin = roles.includes("admin");
 	const menuItems = [
@@ -26,7 +19,7 @@ const FullHome = () => {
 			component: <HomePage />,
 		},
 		{ key: "2", label: "Добавление данных", component: <AddFeedPage /> },
-		{ key: "3", label: "Просмотр всех данных", component: <DataViewPage /> },
+		{ key: "3", label: "Просмотр данных", component: <DataViewPage /> },
 		{ key: "4", label: "Поломки", component: <BreakdownListPage /> },
 	];
 
@@ -36,7 +29,7 @@ const FullHome = () => {
 
 	menuItems.push({
 		key: "6",
-		label: "Настройки профиля",
+		label: "Профиль",
 		component: <SettingsPage />,
 	});
 

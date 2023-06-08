@@ -35,8 +35,10 @@ const LoginPage = () => {
 				justifyContent: "center",
 				alignItems: "center",
 				height: "100vh",
+				flexDirection: "column",
 			}}
 		>
+			{/* Добавлен текст "Авторизация" */}
 			<Form
 				name="login"
 				initialValues={{ remember: true }}
@@ -44,6 +46,9 @@ const LoginPage = () => {
 				onFinishFailed={onFinishFailed}
 				style={{ width: "50%", margin: "auto" }}
 			>
+				<h1 style={{ marginBottom: "24px", textAlign: "center" }}>
+					Авторизация
+				</h1>
 				<Form.Item
 					label="Логин"
 					name="username"
