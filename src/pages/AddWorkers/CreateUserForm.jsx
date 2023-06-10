@@ -46,6 +46,8 @@ const CreateUserForm = ({ visible, onCancel, fetchData }) => {
 					handleSave(values);
 				});
 			}}
+			cancelText="Отмена"
+			okText="Сохранить"
 		>
 			<Form form={form}>
 				<Form.Item

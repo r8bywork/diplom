@@ -70,7 +70,7 @@ const AddWorkers = () => {
 
 	const columns = [
 		{
-			title: "Имя",
+			title: "Наименование",
 			dataIndex: "name",
 			key: "name",
 			sorter: (a, b) => a.name.localeCompare(b.name), // Add sorter function for username column
@@ -311,7 +311,7 @@ const AddWorkers = () => {
 				onClick={() => setIsModalVisible(true)}
 				style={{ marginBottom: 15 }}
 			>
-				Создать пользователя
+				Создать рабочего
 			</Button>
 			<Input
 				placeholder="Поиск по имени"
@@ -336,6 +336,8 @@ const AddWorkers = () => {
 				open={isModalVisible2}
 				onOk={handleOk}
 				onCancel={handleCancel}
+				cancelText="Отмена"
+				okText="Сохранить"
 			>
 				<Input
 					placeholder="Введите роль"
@@ -356,6 +358,8 @@ const AddWorkers = () => {
 				open={isEditModalVisible}
 				onOk={handleEditSave}
 				onCancel={handleEditCancel}
+				cancelText="Отмена"
+				okText="Сохранить"
 			>
 				<Input
 					placeholder="ФИО"

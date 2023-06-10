@@ -98,7 +98,7 @@ const AddFeedPage = () => {
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" htmlType="submit">
-							Добавить комбикорм
+							Добавить корм
 						</Button>
 					</Form.Item>
 				</Form>

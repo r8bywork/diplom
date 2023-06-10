@@ -33,8 +33,6 @@ const HomePage = () => {
 							milk_consumption: 0,
 							heifers: 0,
 							cows: 0,
-							// hutch_number: 0,
-							// calves_per_hutch: 0,
 							abortions: 0,
 							young_animal_losses: 0,
 							stillbirths: 0,

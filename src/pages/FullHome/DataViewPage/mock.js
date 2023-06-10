@@ -11,12 +11,26 @@ const formatDate = (dateString) => {
 	return formattedDate;
 };
 
-export const columns = [
+export const columns = (array) => [
+	// export const columns = [
 	{
 		width: "auto",
 		title: "Кол-во молока",
 		dataIndex: "milk_production",
 		key: "milk_production",
+		render: (text, record, index) => {
+			if (index > 0) {
+				const previousMilk_production = array[index - 1].milk_production;
+				const difference = text - previousMilk_production;
+				const formattedText = `${text.toFixed(2)} (${
+					difference >= 0
+						? `+${difference.toFixed(2)}`
+						: `${difference.toFixed(2)}`
+				})`;
+				return formattedText;
+			}
+			return text.toFixed(2);
+		},
 	},
 	{
 		width: "auto",
@@ -24,11 +38,30 @@ export const columns = [
 		dataIndex: "milk_truck_order",
 		key: "milk_truck_order",
 	},
+	// {
+	// 	width: "auto",
+	// 	title: "Валовый надой",
+	// 	dataIndex: "gross_yield",
+	// 	key: "gross_yield",
+	// },
 	{
 		width: "auto",
 		title: "Валовый надой",
 		dataIndex: "gross_yield",
 		key: "gross_yield",
+		render: (text, record, index) => {
+			if (index > 0) {
+				const previousDayYield = array[index - 1].gross_yield;
+				const difference = text - previousDayYield;
+				const formattedText = `${text.toFixed(2)} (${
+					difference >= 0
+						? `+${difference.toFixed(2)}`
+						: `${difference.toFixed(2)}`
+				})`;
+				return formattedText;
+			}
+			return text.toFixed(2);
+		},
 	},
 	{
 		width: "auto",

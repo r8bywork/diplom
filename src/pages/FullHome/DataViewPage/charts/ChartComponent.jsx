@@ -8,6 +8,8 @@ import {
 import React from "react";
 import { Bar } from "react-chartjs-2";
 const ChartComponent = ({ data, title }) => {
+	console.clear();
+	console.log(data, title);
 	const formatDate = (dateString) => {
 		const date = new Date(dateString);
 		const formattedDate = date.toLocaleDateString("ru-RU", {
@@ -17,18 +19,26 @@ const ChartComponent = ({ data, title }) => {
 		});
 		return formattedDate;
 	};
-
 	Chart.register(LinearScale);
 	Chart.register(BarController, BarElement, CategoryScale);
+	// const chartData = {
+	// 	labels: title.map((item) => item.title),
+	// 	datasets: data.map((dataset) => ({
+	// 		label: formatDate(dataset.date),
+	// 		data: title.map((item) => dataset[item.dataIndex]),
+	// 		backgroundColor: getRandomColor(),
+	// 	})),
+	// };
+	const actualTitles = typeof title === "function" ? title(data) : title;
+
 	const chartData = {
-		labels: title.map((item) => item.title),
+		labels: actualTitles.map((item) => item.title),
 		datasets: data.map((dataset) => ({
 			label: formatDate(dataset.date),
-			data: title.map((item) => dataset[item.dataIndex]),
+			data: actualTitles.map((item) => dataset[item.dataIndex]),
 			backgroundColor: getRandomColor(),
 		})),
 	};
-	console.log(chartData, title);
 
 	const chartOptions = {
 		responsive: true,
@@ -53,4 +63,4 @@ const getRandomColor = () => {
 	return color;
 };
 
-export default ChartComponent;
+export { ChartComponent };

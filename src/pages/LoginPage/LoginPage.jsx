@@ -21,6 +21,7 @@ const LoginPage = () => {
 			}
 		} catch (error) {
 			console.log(error);
+			message.error("Неправильный данные для входа!");
 		}
 	};
 
@@ -52,9 +53,7 @@ const LoginPage = () => {
 				<Form.Item
 					label="Логин"
 					name="username"
-					rules={[
-						{ required: true, message: "Пожалуйста, введите свою почту!" },
-					]}
+					rules={[{ required: true, message: "Это поле обязательно!" }]}
 				>
 					<Input />
 				</Form.Item>
@@ -62,9 +61,7 @@ const LoginPage = () => {
 				<Form.Item
 					label="Пароль"
 					name="password"
-					rules={[
-						{ required: true, message: "Пожалуйста, введите свой пароль!" },
-					]}
+					rules={[{ required: true, message: "Это поле обязательно!" }]}
 				>
 					<Input.Password />
 				</Form.Item>

@@ -68,4 +68,4 @@ const ChartComponent2 = ({ data }) => {
 	return <canvas ref={chartRef} />;
 };
 
-export default ChartComponent2;
+export { ChartComponent2 };

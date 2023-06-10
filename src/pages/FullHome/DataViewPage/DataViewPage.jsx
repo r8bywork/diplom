@@ -4,12 +4,12 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-import ChartComponent from "./charts/ChartComponent";
-import ChartComponent2 from "./charts/ChartComponent2";
-import ChartComponent3 from "./charts/ChartComponent3";
+import { ChartComponent } from "./charts/ChartComponent";
+import { ChartComponent2 } from "./charts/ChartComponent2";
+import { ChartComponent3 } from "./charts/ChartComponent3";
 import { columns, columnsFeed, columnsHouse } from "./mock";
-const { RangePicker } = DatePicker;
 
+const { RangePicker } = DatePicker;
 const DataViewPage = () => {
 	const [rowData, setRowData] = useState([]);
 	const [rowData2, setRowData2] = useState([]);
@@ -251,9 +251,10 @@ const DataViewPage = () => {
 			)}
 			<Table
 				scroll={{ x: 100 }}
+				//? columns
 				columns={
 					selectedDataSource === "all"
-						? columns
+						? columns(transformData(rowData))
 						: selectedDataSource === "feed"
 						? columnsFeed(showModalFeed)
 						: columnsHouse(showModal)
@@ -314,6 +315,8 @@ const DataViewPage = () => {
 				open={visibleFeed}
 				onOk={handleFeedOk}
 				onCancel={handleCancel}
+				cancelText="Отмена"
+				okText="Сохранить"
 			>
 				<div>
 					<label>Наименование корма:</label>
