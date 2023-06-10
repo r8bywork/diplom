@@ -8,8 +8,8 @@ import {
 import React from "react";
 import { Bar } from "react-chartjs-2";
 const ChartComponent = ({ data, title }) => {
-	console.clear();
-	console.log(data, title);
+	// console.clear();
+	// console.log(data, title);
 	const formatDate = (dateString) => {
 		const date = new Date(dateString);
 		const formattedDate = date.toLocaleDateString("ru-RU", {

@@ -1,5 +1,6 @@
-import { Card, Input, Modal, Select, message } from "antd";
+import { Card, Input, Modal, message } from "antd";
 import axios from "axios";
+import dayjs from "dayjs";
 import React, { useState } from "react";
 import "./HomePage.css";
 import { cards } from "./mock";
@@ -9,13 +10,55 @@ const HomePage = () => {
 	const [visible, setVisible] = useState(false);
 	const [card, setCard] = useState({});
 	const [inputValues, setInputValues] = useState({});
+	const [newInputValues, setNewInputValues] = useState({});
+	const startDate =
+		dayjs().startOf("day").format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z";
+	const endDate =
+		dayjs().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss.SSS") +
+		"Z";
 
+	// const showModal = (card) => {
+	// 	setVisible(true);
+	// 	setCard(card);
+	// 	setInputValues({});
+	// };
+	const userId = localStorage.getItem("id");
 	const showModal = (card) => {
 		setVisible(true);
 		setCard(card);
 		setInputValues({});
+
+		// Get the current values from the database
+		const getCurrentValues = async () => {
+			try {
+				const response = await axios.get(
+					`http://localhost:3001/row/getAllByExpression/${userId}`,
+					{
+						params: {
+							startDate: `${startDate}`,
+							endDate: `${endDate}`,
+						},
+					}
+				);
+				const rowData = response.data[0];
+				const currentValues = rowData || {};
+
+				// Update the inputValues state with the current values
+				const updatedInputValues = {};
+				card.fields.forEach((field) => {
+					const { key } = field;
+					if (currentValues.hasOwnProperty(key)) {
+						updatedInputValues[key] = currentValues[key];
+					}
+				});
+				setNewInputValues(updatedInputValues);
+			} catch (error) {
+				console.error("Error fetching current values:", error);
+			}
+		};
+
+		getCurrentValues();
 	};
-	const userId = localStorage.getItem("id");
 
 	const handleOk = async () => {
 		setVisible(false);
@@ -66,44 +109,6 @@ const HomePage = () => {
 		});
 	};
 
-	// const fetchData = async () => {
-	// 	console.clear();
-	// 	const date = new Date();
-	// 	date.setHours(date.getHours() + 3);
-	// 	const response = await axios.get(`http://localhost:3001/row/get/${userId}`);
-	// 	if (response == null) {
-	// 		axios
-	// 			.put("http://localhost:3001/row/update", {
-	// 				date: date,
-	// 				milk_production: 0,
-	// 				milk_truck_order: 0,
-	// 				gross_yield: 0,
-	// 				milk_consumption: 0,
-	// 				heifers: 0,
-	// 				cows: 0,
-	// 				hutch_number: 0,
-	// 				calves_per_hutch: 0,
-	// 				abortions: 0,
-	// 				young_animal_losses: 0,
-	// 				stillbirths: 0,
-	// 				losses_during_fattening_of_cows: 0,
-	// 				losses_of_main_herd_cows: 0,
-	// 			})
-	// 			.then((response) => {
-	// 				// console.log(response.data);
-	// 			})
-	// 			.catch((error) => {
-	// 				console.error(error);
-	// 			});
-	// 	} else {
-	// 		setDocumentId(response.data._id);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	fetchData();
-	// }, []);
-
 	return (
 		<div className="App">
 			<div className="card-container">
@@ -135,34 +140,17 @@ const HomePage = () => {
 					{card.fields &&
 						card.fields.map((field) => (
 							<div key={field.key}>
-								<label>{field.label}</label>
+								<label>{field.label + `:${newInputValues[field.key]}`}</label>
 								<br />
-								{field.type === "select" ? (
-									<Select
-										placeholder={`Выберите ${field.label}`}
-										value={inputValues[field.key] || ""}
-										onChange={(value) =>
-											handleInputChange({ target: { value } }, field.key)
-										}
-										style={{ marginBottom: 16, width: 300 }}
-									>
-										{field.options &&
-											field.options.map((option) => (
-												<Select.Option key={option.value} value={option.value}>
-													{option.label}
-												</Select.Option>
-											))}
-									</Select>
-								) : (
-									<Input
-										// placeholder={`Введите количество ${field.label}`}
-										placeholder={`Введите количество`}
-										value={inputValues[field.key] || ""}
-										onChange={(e) => handleInputChange(e, field.key)}
-										type={field.type || "text"}
-										style={{ marginBottom: 16 }}
-									/>
-								)}
+								<Input
+									// placeholder={`Введите количество ${field.label}`}
+									placeholder={`Введите количество`}
+									// value={inputValues[field.key] || ""}
+									value={inputValues[field.key] || ""}
+									onChange={(e) => handleInputChange(e, field.key)}
+									type={field.type || "text"}
+									style={{ marginBottom: 16 }}
+								/>
 							</div>
 						))}
 				</div>

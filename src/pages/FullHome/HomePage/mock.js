@@ -4,6 +4,20 @@ import milk_production from "../../../assets/milk_production.jpeg";
 import milk_truck_order from "../../../assets/milk_truck_order.jpeg";
 import gross_yield from "../../../assets/releaseMilk.jpg";
 import rojd from "../../../assets/rojd.jpeg";
+// const fetchData = async () => {
+// 	const userId = localStorage.getItem("id");
+// 	const response = await axios.get(
+// 		`http://localhost:3001/row/getAllByExpression/${userId}`,
+// 		{
+// 			params: {
+// 				startDate: `${startDate}`,
+// 				endDate: `${endDate}`,
+// 			},
+// 		}
+// 	);
+// 	setRowData(response.data);
+// };
+
 export const cards = [
 	{
 		id: 1,
@@ -23,7 +37,7 @@ export const cards = [
 		image: milk_truck_order,
 		fields: [
 			{
-				label: "Количество машин",
+				label: "Количество молока",
 				key: "milk_truck_order",
 				type: "number",
 			},
@@ -35,7 +49,7 @@ export const cards = [
 		image: milk_production,
 		fields: [
 			{
-				label: "Количество надоя за день",
+				label: "Количество надоя за день в литрах",
 				key: "gross_yield",
 				type: "number",
 			},
