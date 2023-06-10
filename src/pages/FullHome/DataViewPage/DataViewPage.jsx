@@ -160,7 +160,7 @@ const DataViewPage = () => {
 
 		if (selectedDataSource === "all" && rowData) {
 			exportData = transformData(rowData);
-			columnsConfig = columns;
+			columnsConfig = columns(rowData);
 		} else if (selectedDataSource === "feed" && rowData2) {
 			exportData = transformData(rowData2);
 			columnsConfig = columnsFeed();
