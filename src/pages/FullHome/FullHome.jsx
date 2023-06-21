@@ -11,7 +11,8 @@ import { HomePage } from "./HomePage/HomePage";
 
 const FullHome = () => {
 	const roles = localStorage.getItem("role");
-	const isAdmin = roles.includes("admin");
+	// const isAdmin = roles.includes("admin");
+	const isAdmin = roles && roles.includes("admin");
 	const menuItems = [
 		{
 			key: "1",

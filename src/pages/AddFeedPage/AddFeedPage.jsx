@@ -21,26 +21,6 @@ const AddFeedPage = () => {
 		setDailyRequirement(event.target.value);
 	};
 
-	// const handleAddFeed = async () => {
-	// 	const feedAndAddivitives = {
-	// 		name,
-	// 		balance,
-	// 		daily_requirement,
-	// 	};
-	// 	try {
-	// 		const response = await axios.post(
-	// 			"http://localhost:3001/feedAndAddivitives/update",
-	// 			feedAndAddivitives
-	// 		);
-	// 		response.status === 200
-	// 			? message.success("Вы успешно добавили новый вид корма!")
-	// 			: message.success("Ошибка!");
-	// 		return response.data;
-	// 	} catch (error) {
-	// 		throw new Error(error.response.data);
-	// 	}
-	// };
-
 	const handleAddFeed = async () => {
 		const feedAndAddivitives = {
 			userId: localStorage.getItem("id"),
